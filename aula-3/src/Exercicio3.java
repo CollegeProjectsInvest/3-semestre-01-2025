@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// Connectar Java com SQLite
+// DESAFIO: Connectar Java com SQLite
 public class Exercicio3 {
     public static void listarTarefas(ArrayList<String> tarefas) {
         for (int i = 0; i < tarefas.size(); i++) {
