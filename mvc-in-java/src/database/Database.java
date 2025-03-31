@@ -1,6 +1,9 @@
-package infra;
+package database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Database {
     private static final String CONNECTION_URL = "jdbc:sqlite:database.db";
@@ -18,9 +21,10 @@ public class Database {
     }
 
     public void configuration() {
-        String createTableUserSQL = "CREATE TABLE IF NOT EXISTS user (" +
+        String createTableUserSQL = "CREATE TABLE IF NOT EXISTS tasks (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "name TEXT NOT NULL" +
+                "title TEXT NOT NULL," +
+                "finished BOOLEAN" +
                 ");";
 
         try (Connection connection  = connect()) {

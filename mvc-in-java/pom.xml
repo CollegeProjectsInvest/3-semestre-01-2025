@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>college.invest.poo</groupId>
-    <artifactId>java-with-database</artifactId>
-    <version>1.0</version>
+    <groupId>org.example</groupId>
+    <artifactId>mvc-in-java</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -21,4 +21,5 @@
             <version>3.49.1.0</version>
         </dependency>
     </dependencies>
+
 </project>
