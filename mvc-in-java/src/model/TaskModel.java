@@ -2,7 +2,6 @@ package model;
 
 import database.Database;
 import database.entities.Task;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,14 +18,18 @@ public class TaskModel {
      * Cria tarefa no Banco de Dados
      * @param task Task
      */
-    public void create(Task task) {
-        String createTaskSQL = "INSERT INTO tasks (title, finished) VALUES ('" + task.getTitle() + "', " + task.getFinished() + ");";
+    public boolean create(Task task) {
+        String createTaskSQL = "INSERT INTO tasks (title, finished) VALUES (?, ?);";
 
         try (Connection connection = this.database.connect()) {
-            Statement statement = connection.createStatement();
-            statement.execute(createTaskSQL);
+            var statement = connection.prepareStatement(createTaskSQL);
 
-            System.out.println("Tarefa criada com sucesso!");
+            statement.setString(1, task.getTitle());
+            statement.setBoolean(2, task.getFinished());
+
+            var result = statement.executeUpdate();
+
+            return result == 1;
         } catch (SQLException error) {
             throw new RuntimeException("Erro ao criar nova tarefa: " + error);
         }
@@ -55,6 +58,72 @@ public class TaskModel {
             return tasks;
         } catch (SQLException error) {
             throw new RuntimeException("Erro ao criar nova tarefa: " + error);
+        }
+    }
+
+    /**
+     * Atualiza uma tarefa
+     * @param id int
+     * @param finished boolean
+     * @return boolean
+     */
+    public boolean updateTask(int id, boolean finished) {
+        String updateTaskSQL = "UPDATE tasks SET finished = ? WHERE id = ?;";
+
+        try (Connection connection = this.database.connect()) {
+            var statement = connection.prepareStatement(updateTaskSQL);
+
+            statement.setBoolean(1, finished);
+            statement.setInt(2, id);
+
+            var result = statement.executeUpdate();
+            return result == 1;
+        } catch (SQLException error) {
+            throw new RuntimeException("Erro ao atualizar tarefa: " + error);
+        }
+    }
+
+    /**
+     * Deletar tarefa
+     * @param id int
+     */
+    public boolean deleteTask(int id) {
+        String deleteTasksSQL = "DELETE FROM tasks WHERE id = ?;";
+
+        try (Connection connection = this.database.connect()) {
+            var statement = connection.prepareStatement(deleteTasksSQL);
+
+            statement.setInt(1, id);
+
+            var result = statement.executeUpdate();
+
+            return result == 1;
+        } catch (SQLException error) {
+            throw new RuntimeException("Erro ao deletar tarefa: " + error);
+        }
+    }
+
+    /**
+     * Busca uma tarefa pelo Id
+     * @param id int
+     * @return Task
+     */
+    public Task getById(int id) {
+        String selectTaskSQL = "SELECT * FROM tasks WHERE id = ?;";
+
+        try (Connection connection = this.database.connect()) {
+            var statement = connection.prepareStatement(selectTaskSQL);
+
+            statement.setInt(1, id);
+
+            var resultSet = statement.executeQuery();
+
+            String title = resultSet.getString("title");
+            boolean finished = resultSet.getBoolean("finished");
+
+            return new Task(id, title, finished);
+        } catch (SQLException error) {
+            throw new RuntimeException("Erro ao buscar tarefa: " + error);
         }
     }
 }

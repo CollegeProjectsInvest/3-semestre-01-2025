@@ -13,8 +13,6 @@ public class Main {
         TaskController taskController = new TaskController(taskModel);
         TaskView taskView = new TaskView(taskController);
 
-        // Chamando funções
-        taskView.createTask();
         taskView.listAllTasks();
     }
 }
